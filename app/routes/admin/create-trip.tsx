@@ -119,7 +119,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
 
   const countryTemplate = (country: any) => {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center px-2">
         <img src={country.flagUrl} alt={country.value} width="20px" />
         <span>{country.value}</span>
       </div>
