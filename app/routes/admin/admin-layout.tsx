@@ -3,23 +3,24 @@ import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import { MobileSidebar, NavItems } from "../../../components";
 import { getAuth } from "@clerk/react-router/ssr.server";
 import { getExistingUser, storeUserData } from "~/lib/auth";
-import type { Route } from "./+types/admin-layout";
 
 export const loader = async (args: ClientLoaderFunctionArgs) => {
-  // const request = args.request;
-  // const url = new URL(request.url);
-  // if (url.pathname === "/google/sign-in") return;
+  const request = args.request;
+  const headers = request.headers;
+  const site = headers.get("sec-fetch-site");
+  const url = new URL(request.url);
+  if (url.pathname === "/google/sign-in") return;
 
   try {
     const auth = await getAuth(args);
-    if (!auth.userId) return redirect("/sign-in");
+    if (site !== "cross-site" && !auth.userId) return redirect("/sign-in");
 
     const existingUser = await getExistingUser(auth.userId as string);
     //if (existingUser?.status === "user") return redirect("/");
 
     return existingUser?.accountId
       ? existingUser
-      : await storeUserData(auth.userId);
+      : await storeUserData(auth.userId || "");
   } catch (e) {
     console.error("Error fetching user at admin-layout.tsx", e);
     return redirect("/sign-in");
