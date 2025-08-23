@@ -15,13 +15,13 @@ export const loader = async (args: ClientLoaderFunctionArgs) => {
     if (!auth.userId) return redirect("/sign-in");
 
     const existingUser = await getExistingUser(auth.userId as string);
-    if (existingUser?.status === "user") return redirect("/");
+    //if (existingUser?.status === "user") return redirect("/");
 
     return existingUser?.accountId
       ? existingUser
       : await storeUserData(auth.userId);
   } catch (e) {
-    console.error("Error fetching user", e);
+    console.error("Error fetching user at admin-layout.tsx", e);
   }
 };
 
