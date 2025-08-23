@@ -21,8 +21,6 @@ export const getExistingUser = async (id: string) => {
 
 export const storeUserData = async (id: string) => {
   try {
-    if (!id) return redirect("/sign-in");
-
     const clerk = createClerkClient({
       secretKey: process.env.CLERK_SECRET_KEY,
     });
@@ -39,7 +37,7 @@ export const storeUserData = async (id: string) => {
       })
       .returning();
 
-    if (!createdUser) redirect("/sign-in");
+    if (!createdUser) return redirect("/sign-in");
   } catch (error) {
     console.error("Error storing user data: ", error);
   }
