@@ -6,13 +6,13 @@ import { getExistingUser, storeUserData } from "~/lib/auth";
 import type { Route } from "./+types/admin-layout";
 
 export const loader = async (args: ClientLoaderFunctionArgs) => {
-  const request = args.request;
-  const url = new URL(request.url);
-  if (url.pathname === "/google/sign-in") return;
+  // const request = args.request;
+  // const url = new URL(request.url);
+  // if (url.pathname === "/google/sign-in") return;
 
   try {
     const auth = await getAuth(args);
-    //if (!auth.userId) return redirect("/sign-in");
+    if (!auth.userId) return redirect("/sign-in");
 
     const existingUser = await getExistingUser(auth.userId as string);
     //if (existingUser?.status === "user") return redirect("/");
@@ -22,12 +22,11 @@ export const loader = async (args: ClientLoaderFunctionArgs) => {
       : await storeUserData(auth.userId);
   } catch (e) {
     console.error("Error fetching user at admin-layout.tsx", e);
+    return redirect("/sign-in");
   }
 };
 
-const AdminLayout = ({ loaderData }: Route.ComponentProps) => {
-  const existingUser = loaderData;
-
+const AdminLayout = () => {
   return (
     <div className="admin-layout">
       <MobileSidebar />
