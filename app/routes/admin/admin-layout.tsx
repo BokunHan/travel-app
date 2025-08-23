@@ -7,13 +7,18 @@ import { getExistingUser, storeUserData } from "~/lib/auth";
 export const loader = async (args: ClientLoaderFunctionArgs) => {
   const request = args.request;
   const headers = request.headers;
-  const site = headers.get("sec-fetch-site");
+  const cookie = headers.get("cookie");
+  const client_uat = cookie
+    ?.split("; ")
+    .find((cookie) => cookie.startsWith("__client_uat="))
+    ?.split("=")[1];
+
   const url = new URL(request.url);
   if (url.pathname === "/google/sign-in") return;
 
   try {
     const auth = await getAuth(args);
-    if (site !== "cross-site" && !auth.userId) return redirect("/sign-in");
+    if (client_uat === "0" && !auth.userId) return redirect("/sign-in");
 
     const existingUser = await getExistingUser(auth.userId as string);
     //if (existingUser?.status === "user") return redirect("/");
