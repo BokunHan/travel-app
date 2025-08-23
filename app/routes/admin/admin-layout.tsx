@@ -13,13 +13,15 @@ export const loader = async (args: ClientLoaderFunctionArgs) => {
     .find((cookie) => cookie.startsWith("__client_uat="))
     ?.split("=")[1];
 
-  const url = new URL(request.url);
-  if (url.pathname === "/google/sign-in") return;
+  // const url = new URL(request.url);
+  // if (url.pathname === "/google/sign-in") return;
 
   try {
     const auth = await getAuth(args);
-    if (client_uat === "0" || client_uat === undefined || !client_uat)
-      return redirect("/sign-in");
+    if (!auth) return;
+
+    // if (client_uat === "0" || client_uat === undefined || !client_uat)
+    if (!auth.userId) return redirect("/sign-in");
 
     const existingUser = await getExistingUser(auth.userId as string);
     //if (existingUser?.status === "user") return redirect("/");
