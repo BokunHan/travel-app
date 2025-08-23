@@ -17,7 +17,7 @@ const PageLayout = () => {
           navigate("/dashboard");
         }}
       >
-        Dashboardd
+        Dashboard
       </button>
     </div>
   );
