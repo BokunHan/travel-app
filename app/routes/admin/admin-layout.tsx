@@ -18,7 +18,8 @@ export const loader = async (args: ClientLoaderFunctionArgs) => {
 
   try {
     const auth = await getAuth(args);
-    if (client_uat === "0") return redirect("/sign-in");
+    if (client_uat === "0" || client_uat === undefined || !client_uat)
+      return redirect("/sign-in");
 
     const existingUser = await getExistingUser(auth.userId as string);
     //if (existingUser?.status === "user") return redirect("/");
