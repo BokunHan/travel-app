@@ -21,6 +21,8 @@ export const getExistingUser = async (id: string) => {
 
 export const storeUserData = async (id: string) => {
   try {
+    if (!id) return redirect("/sign-in");
+
     const clerk = createClerkClient({
       secretKey: process.env.CLERK_SECRET_KEY,
     });

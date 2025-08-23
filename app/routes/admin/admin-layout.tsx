@@ -19,7 +19,7 @@ export const loader = async (args: ClientLoaderFunctionArgs) => {
 
     return existingUser?.accountId
       ? existingUser
-      : await storeUserData(auth.userId!);
+      : await storeUserData(auth.userId || "");
   } catch (e) {
     console.error("Error fetching user at admin-layout.tsx", e);
   }
