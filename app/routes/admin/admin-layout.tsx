@@ -13,9 +13,6 @@ export const loader = async (args: ClientLoaderFunctionArgs) => {
     .find((cookie) => cookie.startsWith("__client_uat="))
     ?.split("=")[1];
 
-  // const url = new URL(request.url);
-  // if (url.pathname === "/google/sign-in") return;
-
   try {
     const auth = await getAuth(args);
 

@@ -1,6 +1,5 @@
 import { Header } from "../../../components";
 import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
-import { Query } from "@syncfusion/ej2-data";
 import type { Route } from "./+types/create-trip";
 import React, { useState } from "react";
 import { comboBoxItems, selectItems } from "~/constants";
@@ -14,6 +13,7 @@ import { world_map } from "~/constants/world_map";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { useUser } from "@clerk/react-router";
 import { useNavigate } from "react-router";
+import { Query } from "@syncfusion/ej2-data";
 
 export const loader = async () => {
   const response = await fetch(
@@ -88,6 +88,12 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
         }),
       });
 
+      if (!response) {
+        setError("Something went wrong, please try again.");
+        setLoading(false);
+        return;
+      }
+
       const result: CreateTripResponse = await response.json();
       if (result?.id) navigate(`/trips/${result.id}`);
       else console.error("Failed to create trip");
@@ -119,7 +125,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
 
   const countryTemplate = (country: any) => {
     return (
-      <div className="flex items-center px-2">
+      <div key={country.value} className="flex flex-row items-center px-2">
         <img src={country.flagUrl} alt={country.value} width="20px" />
         <span>{country.value}</span>
       </div>

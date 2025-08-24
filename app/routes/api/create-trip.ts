@@ -68,7 +68,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     let trip = null;
     let retry = 0;
-    const max_retries = 5;
+    const max_retries = 3;
 
     while (retry < max_retries) {
       const textResult = await genAI
@@ -85,6 +85,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       retry++;
     }
+
+    if (retry >= max_retries) return null;
 
     const imageResponse = await fetch(
       `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashAccessKey}`,
