@@ -1,8 +1,10 @@
 import { type ActionFunctionArgs, data } from "react-router";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { parseMarkdownToJson } from "~/lib/utils";
+import { parseMarkdownToJson, parseTripData } from "~/lib/utils";
 import { db } from "../../../database/drizzle";
 import { trips } from "../../../database/schema";
+import { createProduct } from "~/lib/stripe";
+import { eq } from "drizzle-orm";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const {
@@ -104,7 +106,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         imageUrls,
         userId,
       })
-      .returning({ id: trips.id });
+      .returning({ id: trips.id, tripDetail: trips.tripDetail });
+
+    const tripDetail = parseTripData(result[0].tripDetail) as Trip;
+    const tripPrice = parseInt(
+      tripDetail.estimatedPrice.replace("$", "").replace(",", ""),
+      10,
+    );
+    const paymentLink = await createProduct(
+      tripDetail.name,
+      tripDetail.description,
+      imageUrls,
+      tripPrice,
+      result[0].id,
+    );
+
+    await db
+      .update(trips)
+      .set({ payment_link: paymentLink.url })
+      .where(eq(trips.id, result[0].id));
 
     return data({ id: result[0].id });
   } catch (e) {
