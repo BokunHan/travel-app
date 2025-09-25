@@ -15,10 +15,9 @@ const StatsCard = ({
 
   return (
     <article className="stats-card">
-      <h3 className="text-base font-medium">{headerTitle}</h3>
-
       <div className="content">
         <div className="flex flex-col gap-4">
+          <h3 className="text-base font-medium">{headerTitle}</h3>
           <h2 className="text-4xl font-semibold">{total}</h2>
           <div className="flex items-center gap-2">
             <figure className="flex items-center gap-1">
@@ -36,7 +35,7 @@ const StatsCard = ({
                 {Math.round(percentage)}%
               </figcaption>
             </figure>
-            <p className="text-sm font-medium text-gray-100 truncate">
+            <p className="text-sm font-medium text-gray-500 truncate">
               vs last month
             </p>
           </div>
@@ -46,6 +45,7 @@ const StatsCard = ({
           src={`/assets/icons/${isDecrement ? "decrement.svg" : "increment.svg"}`}
           className="xl:w-32 w-full h-full md:h-32 xl:h-full"
           alt="trend graph"
+          fetchPriority="high"
         />
       </div>
     </article>

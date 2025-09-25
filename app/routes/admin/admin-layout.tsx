@@ -2,13 +2,12 @@ import { Outlet, redirect, type ClientLoaderFunctionArgs } from "react-router";
 import { MobileSidebar, NavItems } from "../../../components";
 import { getAuth } from "@clerk/react-router/ssr.server";
 import { getExistingUser, storeUserData } from "~/lib/auth";
-import { lazy } from "react";
-
-const SidebarComponent = lazy(() =>
-  import("@syncfusion/ej2-react-navigations").then((module) => ({
-    default: module.SidebarComponent,
-  })),
-);
+import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
+import syncfusionNavigations from "@syncfusion/ej2-react-navigations/styles/material.css?url";
+import type { LinksFunction } from "react-router";
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: syncfusionNavigations },
+];
 
 export const loader = async (args: ClientLoaderFunctionArgs) => {
   const request = args.request;

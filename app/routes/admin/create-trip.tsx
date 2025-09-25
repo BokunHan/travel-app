@@ -12,7 +12,7 @@ import {
 import { world_map } from "~/constants/world_map";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { useUser } from "@clerk/react-router";
-import { useNavigate } from "react-router";
+import { type MetaFunction, useNavigate } from "react-router";
 import { Query } from "@syncfusion/ej2-data";
 import syncfusionDropdowns from "@syncfusion/ej2-react-dropdowns/styles/material.css?url";
 import type { LinksFunction } from "react-router";
@@ -20,6 +20,16 @@ import type { LinksFunction } from "react-router";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: syncfusionDropdowns },
 ];
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tourvisto Add New Trip" },
+    {
+      name: "description",
+      content: "View and edit AI-generated travel plans.",
+    },
+  ];
+};
 
 export const loader = async () => {
   const response = await fetch(

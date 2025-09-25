@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { getAllTrips, getTripById } from "~/lib/trips";
 import type { Route } from "./+types/trip-detail";
 import { cn, getFirstWord, parseTripData } from "~/lib/utils";
@@ -8,6 +8,16 @@ import {
   ChipListComponent,
   ChipsDirective,
 } from "@syncfusion/ej2-react-buttons";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tourvisto Admin Trip Detail" },
+    {
+      name: "description",
+      content: "View and edit AI-generated travel plans.",
+    },
+  ];
+};
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { tripId } = params;

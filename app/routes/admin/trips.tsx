@@ -1,10 +1,24 @@
 import { Header, TripCard } from "../../../components";
 import React, { useState } from "react";
-import { type LoaderFunctionArgs, useSearchParams } from "react-router";
+import {
+  type LoaderFunctionArgs,
+  type MetaFunction,
+  useSearchParams,
+} from "react-router";
 import { getAllTrips } from "~/lib/trips";
 import { parseTripData } from "~/lib/utils";
 import type { Route } from "./+types/trips";
 import { PagerComponent } from "@syncfusion/ej2-react-grids";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tourvisto Admin Trips" },
+    {
+      name: "description",
+      content: "View and edit AI-generated travel plans.",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const limit = 8;

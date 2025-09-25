@@ -10,10 +10,20 @@ import { getAllUsers } from "~/lib/auth";
 import type { Route } from "./+types/all-users";
 
 import syncfusionGrids from "@syncfusion/ej2-react-grids/styles/material.css?url";
-import type { LinksFunction } from "react-router";
+import type { LinksFunction, MetaFunction } from "react-router";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: syncfusionGrids },
 ];
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tourvisto Admin Manage Users" },
+    {
+      name: "description",
+      content: "Filter, sort, and access detailed user profiles.",
+    },
+  ];
+};
 
 export const loader = async () => {
   const { users, total } = await getAllUsers(10, 0);

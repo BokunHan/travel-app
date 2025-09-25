@@ -6,7 +6,7 @@ import {
   getUsersAndTripsStats,
 } from "~/lib/dashboard";
 import type { Route } from "./+types/dashboard";
-import { type ClientLoaderFunctionArgs } from "react-router";
+import { type ClientLoaderFunctionArgs, type MetaFunction } from "react-router";
 import { getAuth } from "@clerk/react-router/ssr.server";
 import { getAllUsers, getExistingUser } from "~/lib/auth";
 import { getAllTrips } from "~/lib/trips";
@@ -35,6 +35,16 @@ import type { LinksFunction } from "react-router";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: syncfusionGrids },
 ];
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tourvisto Admin Dashboard" },
+    {
+      name: "description",
+      content: "Track activity, trends and popular destinations in real time.",
+    },
+  ];
+};
 
 export const loader = async (args: ClientLoaderFunctionArgs) => {
   const auth = await getAuth(args);
@@ -152,75 +162,95 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartComponent
-          id="chart-1"
-          primaryXAxis={userXAxis}
-          primaryYAxis={useryAxis}
-          title="User Growth"
-          tooltip={{ enable: true }}
-        >
-          <Inject
-            services={[
-              ColumnSeries,
-              SplineSeries,
-              Category,
-              DataLabel,
-              Tooltip,
-            ]}
-          />
+        <div className="flex flex-col">
+          <h3 className="p-20-semibold text-dark-100 text-center">
+            User Growth
+          </h3>
 
-          <SeriesCollectionDirective>
-            <SeriesDirective
-              dataSource={userGrowth}
-              xName="day"
-              yName="count"
-              type="Column"
-              name="Column"
-              columnWidth={0.3}
-              cornerRadius={{ topLeft: 10, topRight: 10 }}
-            />
+          {userGrowth && userGrowth.length > 0 ? (
+            <ChartComponent
+              id="chart-1"
+              primaryXAxis={userXAxis}
+              primaryYAxis={useryAxis}
+              // title="User Growth"
+              tooltip={{ enable: true }}
+            >
+              <Inject
+                services={[
+                  ColumnSeries,
+                  SplineSeries,
+                  Category,
+                  DataLabel,
+                  Tooltip,
+                ]}
+              />
 
-            {/*<SeriesDirective*/}
-            {/*  dataSource={userGrowth}*/}
-            {/*  xName="day"*/}
-            {/*  yName="count"*/}
-            {/*  type="SplineArea"*/}
-            {/*  name="Wave"*/}
-            {/*  fill="rgba(71,132,238, 0.3)"*/}
-            {/*  border={{ width: 2, color: "#4784EE" }}*/}
-            {/*/>*/}
-          </SeriesCollectionDirective>
-        </ChartComponent>
+              <SeriesCollectionDirective>
+                <SeriesDirective
+                  dataSource={userGrowth}
+                  xName="day"
+                  yName="count"
+                  type="Column"
+                  name="Column"
+                  columnWidth={0.3}
+                  cornerRadius={{ topLeft: 10, topRight: 10 }}
+                />
 
-        <ChartComponent
-          id="chart-2"
-          primaryXAxis={tripXAxis}
-          primaryYAxis={tripyAxis}
-          title="Trip Trends"
-          tooltip={{ enable: true }}
-        >
-          <Inject
-            services={[
-              ColumnSeries,
-              SplineSeries,
-              Category,
-              DataLabel,
-              Tooltip,
-            ]}
-          />
+                {/*<SeriesDirective*/}
+                {/*  dataSource={userGrowth}*/}
+                {/*  xName="day"*/}
+                {/*  yName="count"*/}
+                {/*  type="SplineArea"*/}
+                {/*  name="Wave"*/}
+                {/*  fill="rgba(71,132,238, 0.3)"*/}
+                {/*  border={{ width: 2, color: "#4784EE" }}*/}
+                {/*/>*/}
+              </SeriesCollectionDirective>
+            </ChartComponent>
+          ) : (
+            <div>Loading chart data...</div>
+          )}
+        </div>
 
-          <SeriesCollectionDirective>
-            <SeriesDirective
-              dataSource={tripsByTravelStyle}
-              xName="travelStyle"
-              yName="count"
-              type="Column"
-              name="day"
-              columnWidth={0.3}
-              cornerRadius={{ topLeft: 10, topRight: 10 }}
-            />
-          </SeriesCollectionDirective>
-        </ChartComponent>
+        <div className="flex flex-col">
+          <h3 className="p-20-semibold text-dark-100 text-center">
+            Trip Trends
+          </h3>
+
+          {tripsByTravelStyle && tripsByTravelStyle.length > 0 ? (
+            <ChartComponent
+              id="chart-2"
+              primaryXAxis={tripXAxis}
+              primaryYAxis={tripyAxis}
+              // title="Trip Trends"
+              tooltip={{ enable: true }}
+            >
+              <Inject
+                services={[
+                  ColumnSeries,
+                  SplineSeries,
+                  Category,
+                  DataLabel,
+                  Tooltip,
+                ]}
+              />
+
+              <SeriesCollectionDirective>
+                <SeriesDirective
+                  dataSource={tripsByTravelStyle}
+                  xName="travelStyle"
+                  yName="count"
+                  type="Column"
+                  name="day"
+                  columnWidth={0.3}
+                  cornerRadius={{ topLeft: 10, topRight: 10 }}
+                />
+              </SeriesCollectionDirective>
+            </ChartComponent>
+          ) : (
+            <div>Loading chart data...</div>
+          )}
+        </div>
       </section>
 
       <section className="user-trip wrapper">
@@ -228,34 +258,41 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
           <div key={i} className="flex flex-col gap-5">
             <h3 className="p-20-semibold text-dark-100">{title}</h3>
 
-            <GridComponent dataSource={dataSource} gridLines="None">
-              <ColumnsDirective>
-                <ColumnDirective
-                  field="name"
-                  headerText="Name"
-                  width="200"
-                  textAlign="Left"
-                  template={(props: UserData) => (
-                    <div className="flex items-center gap-1.5 px-4">
-                      <img
-                        src={props.imageUrl}
-                        alt="user"
-                        className="rounded-full size-8 aspect-square"
-                        referrerPolicy="no-referrer"
-                      />
-                      <span>{props.name}</span>
-                    </div>
-                  )}
-                />
+            {dataSource && dataSource.length > 0 ? (
+              <GridComponent dataSource={dataSource} gridLines="None">
+                <ColumnsDirective>
+                  <ColumnDirective
+                    field="name"
+                    headerText="Name"
+                    width="200"
+                    textAlign="Left"
+                    template={(props: UserData) => (
+                      <div className="flex items-center gap-1.5 px-4">
+                        <img
+                          src={props.imageUrl}
+                          alt="user"
+                          className="rounded-full size-8 aspect-square object-cover"
+                          referrerPolicy="no-referrer"
+                          loading="lazy"
+                        />
+                        <span>{props.name}</span>
+                      </div>
+                    )}
+                  />
 
-                <ColumnDirective
-                  field={field}
-                  headerText={headerText}
-                  width="150"
-                  textAlign="Left"
-                />
-              </ColumnsDirective>
-            </GridComponent>
+                  <ColumnDirective
+                    field={field}
+                    headerText={headerText}
+                    width="150"
+                    textAlign="Left"
+                  />
+                </ColumnsDirective>
+              </GridComponent>
+            ) : (
+              <p className="text-gray-500">
+                No {title.toLowerCase()} to display.
+              </p>
+            )}
           </div>
         ))}
       </section>
