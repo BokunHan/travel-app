@@ -26,6 +26,7 @@
     "@sentry/profiling-node": "^10.3.0",
     "@sentry/react-router": "^10.3.0",
     "@syncfusion/ej2-base": "^30.2.6",
+    "@syncfusion/ej2-material-theme": "^31.1.21",
     "@syncfusion/ej2-react-buttons": "^30.2.4",
     "@syncfusion/ej2-react-charts": "^30.2.6",
     "@syncfusion/ej2-react-dropdowns": "^30.2.6",

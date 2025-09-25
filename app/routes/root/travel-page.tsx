@@ -14,11 +14,11 @@ const ButtonComponent = lazy(() =>
   })),
 );
 
-const PagerComponent = lazy(() =>
-  import("@syncfusion/ej2-react-grids").then((module) => ({
-    default: module.PagerComponent,
-  })),
-);
+// const PagerComponent = lazy(() =>
+//   import("@syncfusion/ej2-react-grids").then((module) => ({
+//     default: module.PagerComponent,
+//   })),
+// );
 
 const FeaturedDestination = ({
   containerClass = "",
@@ -217,13 +217,13 @@ const TravelPage = ({ loaderData }: Route.ComponentProps) => {
             ))}
           </div>
 
-          <PagerComponent
-            totalRecordsCount={loaderData.total}
-            pageSize={8}
-            currentPage={currentPage}
-            click={(args: any) => handlePageChange(args.currentPage)}
-            cssClass="!mb-4"
-          />
+          {/*<PagerComponent*/}
+          {/*  totalRecordsCount={loaderData.total}*/}
+          {/*  pageSize={8}*/}
+          {/*  currentPage={currentPage}*/}
+          {/*  click={(args: any) => handlePageChange(args.currentPage)}*/}
+          {/*  cssClass="!mb-4"*/}
+          {/*/>*/}
         </Suspense>
       </section>
 
