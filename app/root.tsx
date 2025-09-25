@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/react-router";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import React from "react";
 import {
   isRouteErrorResponse,
@@ -81,6 +82,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
       loaderData={loaderData}
     >
       <Outlet />
+      <SpeedInsights />
     </ClerkProvider>
   );
 }
