@@ -27,7 +27,7 @@ const Header = ({ title, description, ctaText, ctaUrl }: Props) => {
         </h1>
         <p
           className={cn(
-            "text-gray-100 font-normal",
+            "text-gray-500 font-normal",
             location.pathname === "/"
               ? "text-base md:text-lg"
               : "text-sm md:text-lg",
@@ -41,7 +41,7 @@ const Header = ({ title, description, ctaText, ctaUrl }: Props) => {
         <Link to={ctaUrl}>
           <ButtonComponent
             type="button"
-            className="button-class !h-11 !w-full md:w-[240px]"
+            className="button-class !h-11 w-full sm:w-[200px]"
           >
             <img src="/assets/icons/plus.svg" alt="plus" className="size-5" />
             <span className="p-16-semibold text-white">{ctaText}</span>

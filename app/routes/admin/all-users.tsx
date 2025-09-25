@@ -9,6 +9,12 @@ import { cn, formatDate } from "~/lib/utils";
 import { getAllUsers } from "~/lib/auth";
 import type { Route } from "./+types/all-users";
 
+import syncfusionGrids from "@syncfusion/ej2-react-grids/styles/material.css?url";
+import type { LinksFunction } from "react-router";
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: syncfusionGrids },
+];
+
 export const loader = async () => {
   const { users, total } = await getAllUsers(10, 0);
   return { users, total };

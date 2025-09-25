@@ -1,11 +1,24 @@
 import { Link, type LoaderFunctionArgs, useSearchParams } from "react-router";
-import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { cn, parseTripData } from "~/lib/utils";
-import { Header, TripCard } from "../../../components";
 import type { Route } from "../../../.react-router/types/app/routes/admin/+types/trips";
-import { useState } from "react";
-import { PagerComponent } from "@syncfusion/ej2-react-grids";
+import { lazy, Suspense, useState } from "react";
 import { getAllTrips } from "~/lib/trips";
+
+const Header = lazy(() => import("../../../components/Header"));
+
+const TripCard = lazy(() => import("../../../components/TripCard"));
+
+const ButtonComponent = lazy(() =>
+  import("@syncfusion/ej2-react-buttons").then((module) => ({
+    default: module.ButtonComponent,
+  })),
+);
+
+const PagerComponent = lazy(() =>
+  import("@syncfusion/ej2-react-grids").then((module) => ({
+    default: module.PagerComponent,
+  })),
+);
 
 const FeaturedDestination = ({
   containerClass = "",
@@ -26,7 +39,7 @@ const FeaturedDestination = ({
       <article className="featured-card">
         <div
           className={cn(
-            "bg-white rounded-20 font-bold text-red-100 w-fit py-px px-3 text-sm",
+            "bg-white rounded-20 font-bold text-red-600 w-fit py-px px-3 text-sm",
           )}
         >
           {rating}
@@ -43,7 +56,7 @@ const FeaturedDestination = ({
 
           <figure className="flex gap-2 items-center">
             <img
-              src="/assets/images/david.webp"
+              src="/assets/images/david-small.webp"
               alt="user"
               className={cn("size-4 rounded-full aspect-square", {
                 "size-11": bigCard,
@@ -127,59 +140,61 @@ const TravelPage = ({ loaderData }: Route.ComponentProps) => {
           title="Featured Travel Destinations"
           description="Check out some of the best places you visit around the world"
         />
-        <div className="featured">
-          <article>
-            <FeaturedDestination
-              bgImage="bg-card-1"
-              containerClass="h-1/3 lg:h-1/2"
-              bigCard
-              title="Barcelona Tour"
-              rating={4.2}
-              activityCount={196}
-            />
-
-            <div className="travel-featured">
+        <Suspense fallback={<div>Loading Featured Travel Destinations...</div>}>
+          <div className="featured">
+            <article>
               <FeaturedDestination
-                bgImage="bg-card-2"
+                bgImage="bg-card-1"
+                containerClass="h-1/3 lg:h-1/2"
                 bigCard
-                title="London"
-                rating={4.5}
-                activityCount={512}
+                title="Barcelona Tour"
+                rating={4.2}
+                activityCount={196}
+              />
+
+              <div className="travel-featured">
+                <FeaturedDestination
+                  bgImage="bg-card-2"
+                  bigCard
+                  title="London"
+                  rating={4.5}
+                  activityCount={512}
+                />
+                <FeaturedDestination
+                  bgImage="bg-card-3"
+                  bigCard
+                  title="Australia Tour"
+                  rating={3.5}
+                  activityCount={250}
+                />
+              </div>
+            </article>
+
+            <div className="flex flex-col gap-[30px]">
+              <FeaturedDestination
+                containerClass="w-full h-[240px]"
+                bgImage="bg-card-4"
+                title="Spain Tour"
+                rating={3.8}
+                activityCount={150}
               />
               <FeaturedDestination
-                bgImage="bg-card-3"
-                bigCard
-                title="Australia Tour"
-                rating={3.5}
-                activityCount={250}
+                containerClass="w-full h-[240px]"
+                bgImage="bg-card-5"
+                title="Japan"
+                rating={5}
+                activityCount={150}
+              />
+              <FeaturedDestination
+                containerClass="w-full h-[240px]"
+                bgImage="bg-card-6"
+                title="Italy Tour"
+                rating={4.2}
+                activityCount={500}
               />
             </div>
-          </article>
-
-          <div className="flex flex-col gap-[30px]">
-            <FeaturedDestination
-              containerClass="w-full h-[240px]"
-              bgImage="bg-card-4"
-              title="Spain Tour"
-              rating={3.8}
-              activityCount={150}
-            />
-            <FeaturedDestination
-              containerClass="w-full h-[240px]"
-              bgImage="bg-card-5"
-              title="Japan"
-              rating={5}
-              activityCount={150}
-            />
-            <FeaturedDestination
-              containerClass="w-full h-[240px]"
-              bgImage="bg-card-6"
-              title="Italy Tour"
-              rating={4.2}
-              activityCount={500}
-            />
           </div>
-        </div>
+        </Suspense>
       </section>
 
       <section id="trips" className="py-20 wrapper flex flex-col gap-10">
@@ -187,28 +202,29 @@ const TravelPage = ({ loaderData }: Route.ComponentProps) => {
           title="Handpicked Trips"
           description="Browse well-planned trips designes for your travel style"
         />
+        <Suspense fallback={<div>Loading trips...</div>}>
+          <div className="trip-grid">
+            {trips.map((trip) => (
+              <TripCard
+                key={trip.id}
+                id={trip.id}
+                name={trip.name}
+                imageUrl={trip.imageUrls[0]}
+                location={trip.itinerary?.[0]?.location ?? ""}
+                tags={[trip.interests, trip.travelStyle]}
+                price={trip.estimatedPrice}
+              />
+            ))}
+          </div>
 
-        <div className="trip-grid">
-          {trips.map((trip) => (
-            <TripCard
-              key={trip.id}
-              id={trip.id}
-              name={trip.name}
-              imageUrl={trip.imageUrls[0]}
-              location={trip.itinerary?.[0]?.location ?? ""}
-              tags={[trip.interests, trip.travelStyle]}
-              price={trip.estimatedPrice}
-            />
-          ))}
-        </div>
-
-        <PagerComponent
-          totalRecordsCount={loaderData.total}
-          pageSize={8}
-          currentPage={currentPage}
-          click={(args) => handlePageChange(args.currentPage)}
-          cssClass="!mb-4"
-        />
+          <PagerComponent
+            totalRecordsCount={loaderData.total}
+            pageSize={8}
+            currentPage={currentPage}
+            click={(args: any) => handlePageChange(args.currentPage)}
+            cssClass="!mb-4"
+          />
+        </Suspense>
       </section>
 
       <footer className="h-28 bg-white">

@@ -30,6 +30,12 @@ import {
 } from "@syncfusion/ej2-react-grids";
 import React from "react";
 
+import syncfusionGrids from "@syncfusion/ej2-react-grids/styles/material.css?url";
+import type { LinksFunction } from "react-router";
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: syncfusionGrids },
+];
+
 export const loader = async (args: ClientLoaderFunctionArgs) => {
   const auth = await getAuth(args);
   const [

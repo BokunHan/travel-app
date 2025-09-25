@@ -1,0 +1,8 @@
+# Allow all crawlers to access the site by default
+User-agent: *
+Allow: /
+
+# Block crawlers from accessing specific areas
+Disallow: /admin/
+Disallow: /google/
+Disallow: /api/

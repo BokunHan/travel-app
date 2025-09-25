@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router";
+import { cn, getFirstWord } from "~/lib/utils";
 import {
   ChipDirective,
   ChipListComponent,
   ChipsDirective,
 } from "@syncfusion/ej2-react-buttons";
-import { cn, getFirstWord } from "~/lib/utils";
+import "@syncfusion/ej2-react-buttons/styles/material.css";
 
 const TripCard = ({
   id,
@@ -25,7 +26,7 @@ const TripCard = ({
       }
       className="trip-card"
     >
-      <img src={imageUrl} alt={name} />
+      <img src={imageUrl} alt={name} loading="lazy" />
 
       <article>
         <h2>{name}</h2>
@@ -35,12 +36,12 @@ const TripCard = ({
             alt="location"
             className="size-4"
           />
-          <figcaption>{location}</figcaption>
+          <figcaption className="text-gray-500">{location}</figcaption>
         </figure>
       </article>
 
       <div className="mt-5 pl-[18px] pr-3.5 pb-5">
-        <ChipListComponent>
+        <ChipListComponent id="travel-chip" aria-label="travel-chip">
           <ChipsDirective>
             {tags.map((tag, index) => (
               <ChipDirective

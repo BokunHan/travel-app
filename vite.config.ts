@@ -7,6 +7,8 @@ import {
   sentryReactRouter,
   type SentryReactRouterBuildOptions,
 } from "@sentry/react-router";
+// import purgeCss from "vite-plugin-purgecss";
+// import { visualizer } from "rollup-plugin-visualizer";
 
 const sentryConfig: SentryReactRouterBuildOptions = {
   org: "bokun-han",
@@ -25,7 +27,19 @@ export default defineConfig((config) => {
       eslint(),
       reactRouter(),
       sentryReactRouter(sentryConfig, config),
+      // visualizer({ open: true }),
+      // purgeCss({
+      //   content: ["./index.html", "./app/**/*.{js,ts,jsx,tsx}"],
+      //   safelist: {
+      //     standard: [/^(e-|sf-)/],
+      //     deep: [/^(e-|sf-)/],
+      //     greedy: [/^(e-|sf-)/],
+      //   },
+      // }),
     ],
+    build: {
+      sourcemap: "hidden",
+    },
     ssr: {
       noExternal: [/@syncfusion/],
     },

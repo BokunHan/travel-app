@@ -1,8 +1,14 @@
 import { Outlet, redirect, type ClientLoaderFunctionArgs } from "react-router";
-import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import { MobileSidebar, NavItems } from "../../../components";
 import { getAuth } from "@clerk/react-router/ssr.server";
 import { getExistingUser, storeUserData } from "~/lib/auth";
+import { lazy } from "react";
+
+const SidebarComponent = lazy(() =>
+  import("@syncfusion/ej2-react-navigations").then((module) => ({
+    default: module.SidebarComponent,
+  })),
+);
 
 export const loader = async (args: ClientLoaderFunctionArgs) => {
   const request = args.request;

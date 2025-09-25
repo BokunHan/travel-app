@@ -10,7 +10,10 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import "./app.css";
+// import "./app.css";
+import stylesheet from "~/app.css?url";
+import syncfusionBase from "@syncfusion/ej2-base/styles/material.css?url";
+import syncfusionNavigations from "@syncfusion/ej2-react-navigations/styles/material.css?url";
 
 export async function loader(args: Route.LoaderArgs) {
   return rootAuthLoader(args);
@@ -25,8 +28,23 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:wght@400;500;700&display=swap",
   },
+  // {
+  //   rel: "stylesheet",
+  //   href: "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap",
+  // },
+  // {
+  //   rel: "stylesheet",
+  //   href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  // },
+  // {
+  //   rel: "stylesheet",
+  //   href: "https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap",
+  // },
+  { rel: "stylesheet", href: syncfusionBase },
+  { rel: "stylesheet", href: syncfusionNavigations },
+  { rel: "stylesheet", href: stylesheet },
 ];
 
 import { registerLicense } from "@syncfusion/ej2-base";
