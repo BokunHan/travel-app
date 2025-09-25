@@ -1,7 +1,22 @@
-import { type ClientLoaderFunctionArgs, Link, redirect } from "react-router";
+import {
+  type ClientLoaderFunctionArgs,
+  Link,
+  type MetaFunction,
+  redirect,
+} from "react-router";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { SignInButton } from "@clerk/react-router";
 import { getAuth } from "@clerk/react-router/ssr.server";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tourvisto - Start Your Travel Journey" },
+    {
+      name: "description",
+      content: "Manage destinations, itineraries, and user activity with ease.",
+    },
+  ];
+};
 
 export const loader = async (args: ClientLoaderFunctionArgs) => {
   try {
@@ -34,7 +49,7 @@ const Sign_In = () => {
               Start Your Travel Journey
             </h2>
 
-            <p className="p-18-regular text-center text-gray-100 !leading-7">
+            <p className="p-18-regular text-center text-gray-500 !leading-7">
               Sign in with Google to manage destinations, itineraries, and user
               activity with ease.
             </p>
