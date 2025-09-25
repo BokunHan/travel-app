@@ -1,10 +1,4 @@
-import {
-  type ClientLoaderFunctionArgs,
-  type MetaFunction,
-  type LinksFunction,
-  Outlet,
-  redirect,
-} from "react-router";
+import { type MetaFunction, type LinksFunction, Outlet } from "react-router";
 import RootNavbar from "../../../components/RootNavbar";
 import heroImage from "/assets/images/hero-img.webp";
 
@@ -33,21 +27,21 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export async function clientLoader(args: ClientLoaderFunctionArgs) {
-  try {
-    const response = await fetch("/api/auth-callback");
-
-    if (!response.ok) {
-      return redirect("/sign-in");
-    }
-
-    const userData = await response.json();
-    return userData;
-  } catch (e) {
-    console.log("Error fetching user", e);
-    return redirect("/sign-in");
-  }
-}
+// export async function clientLoader(args: ClientLoaderFunctionArgs) {
+//   try {
+//     const response = await fetch("/api/auth-callback");
+//
+//     if (!response.ok) {
+//       return redirect("/sign-in");
+//     }
+//
+//     const userData = await response.json();
+//     return userData;
+//   } catch (e) {
+//     console.log("Error fetching user", e);
+//     return redirect("/sign-in");
+//   }
+// }
 
 const PageLayout = () => {
   return (

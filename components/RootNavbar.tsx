@@ -1,23 +1,11 @@
 import React from "react";
-import {
-  Link,
-  useLoaderData,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { cn } from "~/lib/utils";
-import { SignOutButton } from "@clerk/react-router";
+import { SignedIn, SignedOut, UserButton } from "@clerk/react-router";
 
 const RootNavbar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
-  const user = useLoaderData();
-
-  const handleLogout = async () => {
-    navigate("/sign-in");
-  };
 
   return (
     <nav
@@ -39,39 +27,27 @@ const RootNavbar = () => {
         </Link>
 
         <aside>
-          {user.status === "admin" && (
+          <SignedIn>
             <Link
               to="/dashboard"
               className={cn("text-base font-normal text-white", {
                 "text-dark-100": location.pathname.startsWith("/travel"),
               })}
             >
-              Admin Panel
+              Dashboard
             </Link>
-          )}
 
-          <img
-            src={user?.imageUrl || "/assets/images/david.wepb"}
-            alt="user"
-            referrerPolicy="no-referrer"
-          />
+            <UserButton />
+          </SignedIn>
 
-          <SignOutButton>
-            <button className="cursor-pointer">
-              <img
-                src="/assets/icons/logout.svg"
-                alt="logout"
-                className="size-6 rotate-180"
-              />
-            </button>
-          </SignOutButton>
-          {/*<button onClick={handleLogout} className="cursor-pointer">*/}
-          {/*  <img*/}
-          {/*    src="/assets/icons/logout.svg"*/}
-          {/*    alt="logout"*/}
-          {/*    className="size-6 rotate-180"*/}
-          {/*  />*/}
-          {/*</button>*/}
+          <SignedOut>
+            <Link
+              to="/sign-in"
+              className={cn("text-base font-normal text-white")}
+            >
+              Sign In
+            </Link>
+          </SignedOut>
         </aside>
       </header>
     </nav>
